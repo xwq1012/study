@@ -1,13 +1,9 @@
 --查看防火墙状态
 systemctl status firewalld
-
 systemctl start firewalld
-
 systemctl stop firewalld
 
 --查看已开放的端口
 firewall-cmd --list-ports
-
 firewall-cmd --zone=public --add-port=8085/tcp --permanent
-
 firewall-cmd --reload
