@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>控制器Controller</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl">
+    <h4>{{title}}</h4>
+    <button ng-click="setTitle();"></button>
+</div>
+
+<!--控制器在Angualrjs 中的作用是增强视图，并且是一个函数，用来向视图的作用域中添加额外的功能。我们用它来给作用域对象设置初始状态，并添加自定义行为。-->
+
+<!--ng 创建了一个新的子级 作用域(scope)-->
+
+<!--我们使用控制器做两件事-->
+<!--初始化 $scope 对象-->
+<!--为 $scope 对象添加行为（方法）-->
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module("Demo", [], angular.noop);
+
+    app.controller("TestCtrl", function ($scope) {
+        $scope.title = "controller";
+
+        $scope.setTitle = function () {
+            $scope.title = "setTitle";
+        };
+    });
+
+
+</script>
+</body>
+</html>

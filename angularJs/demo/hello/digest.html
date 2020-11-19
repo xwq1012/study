@@ -1,0 +1,55 @@
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>$digest $apply</title>
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    Delayed Message: {{message}}
+</div>
+
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/angular.js"></script>
+
+<script type="text/javascript">
+    var app = angular.module('Demo', [], angular.noop);
+    app.controller('TestCtrl', function ($scope, $timeout) {
+        $scope.a = "111";
+
+        //ng 可以和 jQuery pojo等 集成工作
+        // ng 的使用最忌讳的一点就是修改 DOM 结构
+        // AngularJS对此有着很明白的要求，就是它仅仅负责对发生于AngularJS上下文环境中的变更会做出自己主动地响应(即，在$apply()方法中发生的对于models的更改)
+
+
+        $scope.getMessage = function() {
+
+            // setTimeout(function() {
+            //     $scope.$apply(function() {
+            //         //wrapped this within $apply
+            //         $scope.message = 'Fetched after 3 seconds';
+            //         console.log('message:' + $scope.message);
+            //     });
+            // }, 2000);
+
+            // setTimeout(function() {
+            //     $scope.message = 'Fetched after 3 seconds';
+            //     console.log('message:'+$scope.message);
+            //         // 自己主动触发$rootScope.$digest()
+            //     $scope.$apply();  //当你传入一个function到$apply()中的时候。这个function会被包装到一个try…catch块中。所以一旦有异常发生，该异常会被$exceptionHandler service处理。
+            //     // $scope.$digest();  //$digest循环不会仅仅执行一次     最少也会执行两次  来确保models没有变化  只会通知当前和子作用域 $scope.$apply() 通知所有数据
+            // }, 2000);
+
+            // $timeout(function() {
+            //     $scope.message = 'Fetched after 3 seconds';
+            //     console.log('message:'+$scope.message);
+            //     $scope.$digest();
+            // }, 2000);
+
+        };
+        $scope.getMessage();
+
+    });
+</script>
+</body>
+</html>

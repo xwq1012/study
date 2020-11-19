@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义指令-scope</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    <div a b c></div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+    // scope 的形式。
+    // 1、false 继续不创建一个新的 scope
+    // 2、true 继承创建一个新的 scope  ，
+    // 3、{} 不继承创建一个新的  隔离 scope 。
+    // {@attr: '引用节点属性', =attr: '把节点属性值引用成scope属性值', &attr: '把节    点属性值包装成函数'}
+    //
+    //
+    // 对于 scope ：
+    // 默认为 false ， link 函数接受的 scope 为节点所在的 scope 。
+    // 为 true 时，则 link 函数中第一个参数（还有 controller 参数中的 $scope）， scope 是节点所在的 scope 的 child scope ，
+    // 并且如果节点中有多个指令，则只要其中一个指令是 true 的设置，其它所有指令都会受影响。
+    // 这个参数还有其它取值。当其为 {} 时，则 link 接受一个完全隔离（isolate）的 scope ，
+    // 于true 的区别就是不会继承其它 scope 的属性。但是这时，这个 scope 的属性却可以有很灵活
+    // 的定义方式：
+
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.directive('a', function () {
+        return {
+            // priority:1,
+            link: function (scope) {
+                console.log("directive a:" + scope.a);
+            },
+            scope: true,
+            restrict: 'A'
+        };
+    });
+
+    app.directive('b', function () {
+        return {
+            // priority:2,
+            link: function (scope) {
+                console.log("directive b:" + scope.a);
+            },
+            scope:false,
+            restrict: 'A'
+        };
+    });
+
+    app.directive('c', function () {
+        return {
+            // priority:3,
+            link: function (scope) {
+                console.log("directive c:" + scope.a);
+            },
+            scope: {},
+            restrict: 'A'
+        };
+    });
+
+    app.controller('TestCtrl', function ($scope, $timeout) {
+        $scope.a = '123';
+        console.log("TestCtrl:" + $scope.a);
+    });
+</script>
+</body>
+</html>

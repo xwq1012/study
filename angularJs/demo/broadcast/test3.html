@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>$on、$emit和$broadcast使用</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+<div ng-controller="IndexCtrl">                     <!--父父级-->
+    <div ng-controller="ParentCtrl">                <!--父级-->
+        <div ng-controller="SelfCtrl">              <!--自己-->
+            <button ng-click="click()">click me</button>
+            <div ng-controller="ChildCtrl">             <!--子级-->
+                <div ng-controller="GrandsonCtrl">      <!--孙子级-->
+
+                </div>
+            </div>
+        </div>
+        <div ng-controller="BroCtrl"></div>         <!--平级-->
+    </div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    //     $on、$emit和$broadcast使得event、data在controller之间的传递参数。
+    //      $emit只能向parent controller传递event与data
+    //     $broadcast只能向child controller传递event与data
+    //     $on用于接收event与data
+
+
+    var app = angular.module("Demo", [], angular.noop);
+
+    app.controller('SelfCtrl', function ($scope) {
+        $scope.click = function () {
+            $scope.$broadcast('to-child', 'child');
+            $scope.$emit('to-parent', 'parent');
+        }
+    });
+
+    app.controller("IndexCtrl", function ($scope) {
+        $scope.$on('to-parent', function (event, data) {
+            console.log('IndexCtrl', data);       //父父级能得到值
+        });
+        $scope.$on('to-child', function (event, data) {
+            console.log('IndexCtrl', data);       //子级得不到值
+        });
+    });
+
+    app.controller('ParentCtrl', function ($scope) {
+        $scope.$on('to-parent', function (event, data) {
+            console.log('ParentCtrl', data);       //父级能得到值
+        });
+        $scope.$on('to-child', function (event, data) {
+            console.log('ParentCtrl', data);       //子级得不到值
+        });
+    });
+
+    app.controller('ChildCtrl', function ($scope) {
+        $scope.$on('to-child', function (event, data) {
+            console.log('ChildCtrl', data);         //子级能得到值
+        });
+        $scope.$on('to-parent', function (event, data) {
+            console.log('ChildCtrl', data);         //父级得不到值
+        });
+    });
+
+    app.controller('GrandsonCtrl', function ($scope) {
+        $scope.$on('to-child', function (event, data) {
+            console.log('GrandsonCtrl', data);         //子级能得到值
+        });
+        $scope.$on('to-parent', function (event, data) {
+            console.log('GrandsonCtrl', data);         //父级得不到值
+        });
+    });
+
+    app.controller('BroCtrl', function ($scope) {
+        $scope.$on('to-parent', function (event, data) {
+            console.log('BroCtrl', data);          //平级得不到值
+        });
+        $scope.$on('to-child', function (event, data) {
+            console.log('BroCtrl', data);          //平级得不到值
+        });
+    });
+
+</script>
+</body>
+</html>

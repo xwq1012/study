@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Demo">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义服务之provider</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body ng-controller="TestCtrl">
+
+</body>
+
+<script>
+
+    //     服务本身是一个任意的对象。但是 ng 提供服务的过程涉及它的依赖注入机制。在这里呢，就要先介
+    //     绍一下叫 provider 的东西。
+    // 简单来说， provider 是被“注入控制器”使用的一个对象，注入机制通过调用一个 provider 的 $get()
+    //     方法，把得到的东西作为参数进行相关调用（比如把得到的服务作为一个 Controller 的参数）。
+    // 在这里“服务”的概念就比较不明确，对使用而言，服务仅指 $get() 方法返回的东西，但是在整体机
+    //     制上，服务又要指提供了 $get() 方法的整个对象。
+
+    //这是一个provider
+    var pp = function () {
+        this.$get = function () {
+            return {'haha': '123'};
+        }
+    };
+    //我在模块的初始化过程当中, 定义了一个叫 PP 的服务
+    var app = angular.module('Demo', [], function ($provide) {
+        $provide.provider('PP', pp);
+    });
+
+    //PP服务实际上就是 pp 这个 provider 的 $get() 方法返回的东西
+    app.controller('TestCtrl', function ($scope, PP) {
+            console.log(PP.haha);
+        }
+    );
+
+</script>
+</html>

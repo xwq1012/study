@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>内置9大过滤器（模板中使用）</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    <div>
+        {{currDate}}<br>
+        {{currDate | date: 'yyyy-MM-dd HH:mm:ss' }}<br>
+    </div>
+    <br>
+    <div>
+        {{ 'abc' | uppercase }}<br>
+        {{ 'Abc' | lowercase }}<br>
+    </div>
+    <br>
+    <div>
+        {{ 3600 | currency: "$￥"}}<br>
+    </div>
+    <br>
+    <div>
+        {{ "AngularJS" | limitTo:3}}<br>
+        {{ "AngularJS" | limitTo:-3}}<br>
+        {{ data | limitTo:2}}<br>
+    </div>
+    <br>
+    <div>
+        {{ "1234567" | number}}<br>
+        {{ "1234567" | number:2}}<br>
+        {{ "1234567.123" | number:2}}<br>
+    </div>
+    <br>
+    <div>
+        {{ data | orderBy: 'age' }} <br/>
+        {{ data | orderBy: '-age' }} <br/>
+        {{ data | orderBy: '-age' | limitTo: 2 }} <br/>
+        {{ data | orderBy: ['-age', 'name'] }} <br/>
+    </div>
+    <br>
+    <div>
+        {{ obj | json }}<br>
+    </div>
+    <br>
+    <div>
+        {{ data | filter: 'b' }} <br/>
+        {{ data | filter: '!B' }} <br/>
+    </div>
+    <br>
+    <div>
+        {{ data | filter: {name: 'A'} }} <br/>
+        {{ data | filter: {$: '3'} }} <br/>
+        {{ data | filter: {$: '!3'} }} <br/>
+    </div>
+
+    <br>
+    <!--例子：表头排序-->
+    <div>
+        <table>
+            <tr>
+                <th ng-click="f='name'; rev=!rev">名字</th>
+                <th ng-click="f='age'; rev=!rev">年龄</th>
+            </tr>
+
+            <tr ng-repeat="o in data | orderBy: f : rev">
+                <td>{{ o.name }}</td>
+                <td>{{ o.age }}</td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <!--例子：搜索-->
+    <div ng-init="s=data[0].name; q=''">
+        <div>
+            <span>查找：</span> <input type="text" ng-model="q"/>
+        </div>
+        <select ng-multiple="true" ng-model="s"
+                ng-options="o.name as o.name + '(' + o.age + ')' for o in data | filter:{name: q} | orderBy: ['age', 'name'] ">
+        </select>
+    </div>
+
+    <!--<button ng-click="show();">测试</button>-->
+    <!--<button ng-click="set();">测试1</button>-->
+
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.controller("TestCtrl", function ($scope) {
+        $scope.see = function () {
+            console.log($scope.test_form.$error);
+        };
+
+        $scope.show = function () {
+            console.log($scope.a);
+        };
+
+
+        $scope.data = [
+            {name: 'A', age: 1},
+            {name: 'B', age: 4},
+            {name: 'C', age: 3},
+            {name: 'D', age: 3}
+        ];
+
+        $scope.obj = {"a": "1"};
+
+        $scope.currDate = ((new Date().valueOf()));
+    });
+</script>
+</body>
+</html>

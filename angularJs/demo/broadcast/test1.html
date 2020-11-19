@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>子父作用域</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="ParentCtrl">
+    <div ng-controller="ChildCtrl">
+
+    </div>
+</div>
+
+<!--子作用域 默认继承 父作用域  可以共享父作用域的数据-->
+<!--父作用域访问不了子作用域里面的数据-->
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module("Demo", [], angular.noop);
+
+    app.controller("ParentCtrl", function ($scope,$timeout) {
+        $scope.a = "parent";
+        console.log($scope.b);
+
+        $scope.data = {};
+        $timeout(function () {
+            console.log($scope.data.b);
+        }, 1000);
+    });
+
+    app.controller("ChildCtrl", function ($scope) {
+        $scope.data.b = "child";
+        // $scope.b = "child";
+        console.log($scope.a)
+    });
+
+
+</script>
+</body>
+</html>

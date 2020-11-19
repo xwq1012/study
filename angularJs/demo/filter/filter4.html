@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义过滤器（多个参数）</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    <p>示例数据: {{ a|map:map_value:'>>':'(no)' }}</p>
+    <p>示例数据: {{ b|map:map_value:'>>':'(no)' }}</p>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module('Demo', [], angular.noop);
+    app.controller('TestCtrl', function ($scope) {
+        $scope.map_value = {
+            a: '过',
+            b: '滤',
+            c: '器'
+        };
+
+        $scope.a = 'a';
+    });
+
+    app.filter('map', function () {
+        var filter = function (input, map_value, append, default_value) {
+            //取值
+            var r = map_value[input];
+            if (r === undefined) {
+                return default_value + append
+            }
+            else {
+                return r + append
+            }
+        };
+        return filter;
+    });
+</script>
+</body>
+</html>

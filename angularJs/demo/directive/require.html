@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义指令</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<!--require 参数可以带两种前缀（可以同时使用）：-->
+<!--? ，如果指定的 controller 不存在，则忽略错误。即：require: '?not_b'-->
+<!--如果名为 not_b 的 controller 不存在时，不会直接抛出错误， link 函数中对应的$controller 为 undefined 。-->
+<!--^ ，同时在父级节点中寻找指定的 controller -->
+<div>
+
+    <a></a>
+</div>
+
+<!--这个参数的作用是提供一个 controller 的构造函数，它会在 compile函数之后， link 函数之前被执行-->
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.directive('a', function () {
+        var compile = function () {
+            console.log('compile');
+            return function () {
+                console.log('link');
+            }
+        };
+
+        var controller = function ($scope, $element, $attrs, $transclude) {
+            console.log('controller');
+            console.log($scope);
+
+            var node = $transclude(function (clone_element, scope) {
+                console.log(clone_element);
+                console.log('--');
+                console.log(scope);
+            });
+            console.log(node);
+        };
+
+        return {
+            compile: compile,
+            controller: controller,
+            transclude: true,
+            restrict: 'E'
+        }
+    });
+</script>
+</body>
+</html>

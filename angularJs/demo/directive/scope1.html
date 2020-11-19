@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义指令-scope</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body>
+
+<!--directive 默认能共享父 scope 中定义的属性，例如在模版中直接使用父 scope 中的对象和属性。通常使用这种直接共享的方式可以实现一些简单的 directive 功能。-->
+<!--但是，当你要创建一个可以重复使用的directive的时候，就不能依赖于父scope了，因为在不同的地方使用directive对应的父scope不一样。-->
+<!--所以你需要一个隔离的scope，我们可以向下面这样来定义我们的scope。-->
+
+<!--如果我想将父scope中的属性传递给directive的scope怎么办呢？-->
+
+<!--directive 在使用隔离 scope 的时候，提供了三种方法同隔离之外的地方交互-->
+<!--1、@ 指令中定一个变量用来获取父scope中的值，是单项绑定的，指令中的值改变，父scope中的值不变-->
+<!--2、& 调用父级作用域中的方法（function）-->
+<!--3、= 指令中定一个变量用来获取父scope中的值，是双项绑定的，指令中的值改变，父scope中的值不变-->
+<div ng-controller="TestCtrl">
+    <div scope-demo a="data.a" b="data.b" c="fn()" d="{{data.a}}"  ></div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.directive('scopeDemo', function () {
+        return {
+            scope: {
+                a: '@a',    //获取父scope中的值   单项绑定
+                b: '=b',    //变量用来获取父scope中的值，是双项绑定的
+                c: '&c', //调用父级作用域中的方法
+
+                d:'@d'   //这种方式 配合 这种 {{data.a}} 写法 也可以取到变量值
+
+                // a:'@',
+                // b:'=',
+                // c:'&'
+            },
+            restrict: 'A',
+            link: function (scope) {
+                console.log(scope.a);
+                console.log(scope.b);
+                scope.b = "bbbb";
+                console.log(scope.c("123"));
+
+                console.log(scope.d);
+            }
+            // controller: function ($scope) {
+            //     console.log($scope.a);
+            //     console.log($scope.b);
+            //     console.log($scope.c);
+            // }
+        };
+    });
+
+    app.controller('TestCtrl', function ($scope, $timeout) {
+        $scope.data = {
+            a: "a",
+            b: "b"
+        };
+
+        $scope.fn = function (str) {
+            console.log("data for directive");
+            console.log(str);
+            return "c";
+        };
+
+        $timeout(function () {
+            console.log("指令修改后的数据：" + $scope.data.b);
+        }, 2000);
+    });
+</script>
+</body>
+</html>

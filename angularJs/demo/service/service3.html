@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Demo">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义服务之service</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body ng-controller="TestCtrl">
+
+</body>
+
+<script>
+
+    // 第三个是 service 方法，也是由 $provide 提供， module 中有对它的同名引用。
+    // service 和 factory 的区别在于，前者是要求提供一个“构造方法”，后者是要求提供 $get() 方法。
+    // 意思就是，前者一定是得到一个 object ，后者可以是一个数字或字符串。
+
+
+    var app = angular.module('Demo', [], function () {
+    });
+
+    app.service('PP', function () {
+        this.abc = '123';
+        this.setTitle = function () {
+            console.log("setTitle");
+        };
+    });
+
+    app.controller('TestCtrl', function ($scope, PP) {
+        console.log(PP.abc);
+        PP.setTitle();
+    });
+
+</script>
+</html>

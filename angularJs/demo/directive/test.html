@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义指令</title>
+    <!--<script type="text/javascript" src="../../js/jquery.min.js"></script>-->
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+<!--这是 ng 最强大的一部分，也是最复杂最让人头疼的部分-->
+
+<!--目前我们看到的所谓“模板”系统，只不过是官方实现的几个指令而已。-->
+<!--我们通过自定义各种指令，我们也可以完全定义一套“模板”系统-->
+
+<!--ng 中对指令的解析与执行过程是这样的：-->
+<!--1、浏览器得到 HTML 字符串内容，解析得到 DOM 结构。-->
+<!--2、ng 引入，把 DOM 结构扔给 $compile 函数处理：-->
+<!--3、找出 DOM 结构中有变量占位符-->
+<!--4、匹配找出 DOM 中包含的所有指令引用-->
+<!--5、把指令关联到 DOM-->
+<!--6、关联到 DOM 的多个指令按权重排列-->
+<!--7、执行指令中的 compile 函数（改变 DOM 结构，返回 link 函数）-->
+<!--8、得到的所有 link 函数组成一个列表作为 $compile 函数的返回-->
+<!--9、执行 link 函数（连接模板的 scope ）。-->
+
+
+<div>
+    <hello>我是原来的内容</hello>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    // 如果在 directive 中直接返回一个函数，则这个函数会作为 compile 的返回值，也即是作为link 函数使用。
+    // 这里说的 compile 和 link 都是一个指令的组成部分
+
+    var app = angular.module('Demo', [], angular.noop);
+    // app.directive('show', function () {
+    //     var func = function ($scope, $element, $attrs) {
+    //         $scope.show = "如果在 directive 中直接返回一个函数，则这个函数会作为 compile 的返回值";
+    //         console.log($scope);
+    //         console.log($element);
+    //         console.log($attrs);
+    //     };
+    //     return func;
+    //     //return {compile: function(){return func}}
+    // });
+
+    app.directive("hello", function () {
+        var option = {
+            restrict: "AECM",
+            // template: "<div>我是指令生成的内容</div>",
+            template: "<div>我是指令生成的内容，<span ng-transclude></span></div>",
+            // templateUrl: "template.html",
+            // replace: true, //使用模板替换原始标记  指令内原本的数据将被清空
+            transclude: true,  //这里transculde为true，所以原来的内容会被放在有ng-transclude属性的标签内
+            terminal:true,
+            priority: 1
+        };
+        return option;
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Demo">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义服务之factory</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body ng-controller="TestCtrl">
+
+</body>
+
+<script>
+
+    // 上面的代码是一种定义服务的方法，当然， ng 还有相关的 shortcut， ng 总有很多 shortcut
+
+    // 第二个是 factory 方法，由 $provide 提供， module 的 factory 是一个引用，作用一样。这个方法
+    // 直接把一个函数当成是一个对象的 $get() 方法，这样你就不用显式地定义一个 provider 了：
+
+    var app = angular.module('Demo', [], function () {
+    });
+
+
+    app.factory('PP', function () {
+        return {'abc': '123'}
+    });
+
+    app.controller('TestCtrl', function ($scope, PP) {
+        console.log(PP.abc)
+    });
+
+</script>
+</html>

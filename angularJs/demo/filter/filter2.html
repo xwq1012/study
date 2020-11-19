@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>Filter过滤器（控制器内使用）</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    <div>
+        {{num}}<br>
+        {{date}}<br>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.controller("TestCtrl", function ($scope, $filter) {
+        $scope.data = [
+            {name: 'A', age: 1},
+            {name: 'B', age: 4},
+            {name: 'C', age: 3},
+            {name: 'D', age: 3}
+        ];
+
+        $scope.num = $filter('currency')(123534);
+
+        $scope.date = $filter('date')(new Date(), 'yyyy-MM-dd');
+
+        $scope.date = $filter('filter')($scope.data, {name: 'A'});
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>内置指令之ngOption</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+
+    <!--最简单的使用方法， x for x in list ：-->
+    <select ng-model="a" ng-options="x for x in o" ng-change="show()"
+            ng-init="o=[0,1,2,3]; a=o[1];">
+        <option value="">可以加这个空值</option>
+    </select>
+
+    <select ng-model="a" ng-options="x.name for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA'}, {name: 'BB'}]; a=o[1];">
+    </select>
+
+    <!--显示与值分别指定， x.v as x.name for x in o ：-->
+    <select ng-model="a" ng-options="x.v as x.name for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA', v: '00'}, {name: 'BB', v: '11'}]; a=o[1].v;">
+    </select>
+
+
+    <select ng-model="a" ng-options="x.name group by x.g for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA', g: '00'}, {name: 'BB', g: '11'}, {name: 'CC', g:'00'}]; a=o[1];">
+    </select>
+
+
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module('Demo', [], angular.noop);
+
+    app.controller("TestCtrl", function ($scope) {
+
+    });
+
+</script>
+</body>
+</html>

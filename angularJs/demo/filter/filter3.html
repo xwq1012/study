@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>自定义过滤器</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="TestCtrl">
+    <p>示例数据: {{ a | map }}</p>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module('Demo', [], angular.noop);
+    app.controller("TestCtrl", function ($scope) {
+        $scope.a = "123";
+    });
+
+    app.filter('map', function () {
+        var filter = function (input) {
+            return input + '......';
+        };
+        return filter;
+    });
+</script>
+</body>
+</html>

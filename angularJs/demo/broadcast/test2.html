@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>作用域独立</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<div ng-controller="TestCtrl1">
+
+</div>
+
+<div ng-controller="TestCtrl2">
+
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module("Demo", [], angular.noop);
+
+    app.controller("TestCtrl1", function ($scope) {
+        $scope.a = "test1";
+        console.log($scope.b);
+    });
+
+    app.controller("TestCtrl2", function ($scope) {
+        $scope.b = "test1";
+        console.log($scope.a);
+    });
+
+
+</script>
+
+</body>
+</html>

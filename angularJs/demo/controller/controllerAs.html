@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>控制器升级版（1.2版本以上）</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl as test">
+    <h4>{{test.title}}</h4>
+</div>
+
+<!--就是在定义一个名称为TestCtrl的构造函数，TestCtrl as test就是在实例化，生成TestCtrl的实例test-->
+
+<!--1、controller as让继承关系的变量之间更清晰可读-->
+<!--2、controller as 方式解决了父子$scope带来的混乱-->
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module("Demo",[],angular.noop);
+
+    app.controller("TestCtrl",function () {
+        var scope = this;
+        scope.title = "controllerAs";
+    });
+
+
+</script>
+</body>
+</html>

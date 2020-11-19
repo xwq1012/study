@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Test</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/angular.js"></script>
+
+</head>
+<body>
+<div ng-controller="BoxCtrl">
+    <ul ng-init="arr=[1,2,3,4]">
+        <li ng-class-odd="'odd'" ng-class-even="'even'" ng-repeat="m in arr">{{ $index +"、"+ m }}</li>
+    </ul>
+
+
+    <div ng-init="a=3">
+        <ul ng-switch on="a">
+            <li ng-switch-when="1">1</li>
+            <li ng-switch-when="2">2</li>
+            <li ng-switch-default>other</li>
+        </ul>
+    </div>
+</div>
+
+<form name="test_form" ng-controller="TestCtrl">
+    <input type="text" name="a" required ng-model="a"/>
+    <input type="text" name="b" required ng-model="b" ng-minlength="2"/>
+    <span ng-click="see();">show</span>
+
+    <!--最简单的使用方法， x for x in list ：-->
+    <select ng-model="a" ng-options="x for x in o" ng-change="show()" ng-init="o=[0,1,2,3]; a=o[1];">
+        <option value="">可以加这个空值</option>
+    </select>
+
+    <select ng-model="a" ng-options="x.name for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA'}, {name: 'BB'}]; a=o[1];">
+    </select>
+
+    <!--显示与值分别指定， x.v as x.name for x in o ：-->
+    <select ng-model="a" ng-options="x.v as x.name for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA', v: '00'}, {name: 'BB', v: '11'}]; a=o[1].v;">
+    </select>
+
+
+    <select ng-model="a" ng-options="x.name group by x.g for x in o" ng-change="show()"
+            ng-init="o=[{name: 'AA', g: '00'}, {name: 'BB', g: '11'}, {name: 'CC', g:'00'}]; a=o[1];">
+    </select>
+
+
+    <div>
+        {{ data | orderBy: 'age' }} <br/>
+        {{ data | orderBy: '-age' }} <br/>
+        {{ data | orderBy: '-age' | limitTo: 2 }} <br/>
+        {{ data | orderBy: ['-age', 'name'] }} <br/>
+
+        {{ data | filter: 'b' }} <br/>
+        {{ data | filter: '!B' }} <br/>
+
+        {{ data | filter: {name: 'A'} }} <br/>
+        {{ data | filter: {$: '3'} }} <br/>
+        {{ data | filter: {$: '!3'} }} <br/>
+
+        {{currDate}}
+        {{ currDate | date: 'yyyy-MM-dd HH:mm:ss' }}
+
+        {{ 'abc' | uppercase }}
+        {{ 'Abc' | lowercase }}
+    </div>
+
+    <!--例子：表头排序-->
+    <div>
+        <table>
+            <tr>
+                <th ng-click="f='name'; rev=!rev">名字</th>
+                <th ng-click="f='age'; rev=!rev">年龄</th>
+            </tr>
+
+            <tr ng-repeat="o in data | orderBy: f : rev">
+                <td>{{ o.name }}</td>
+                <td>{{ o.age }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--例子：搜索-->
+    <div ng-init="s=data[0].name; q=''">
+        <div>
+            <span>查找：</span> <input type="text" ng-model="q" />
+        </div>
+        <select ng-multiple="true" ng-model="s"
+                ng-options="o.name as o.name + '(' + o.age + ')' for o in data | filter:{name: q} | orderBy: ['age', 'name'] ">
+        </select>
+    </div>
+
+    <button ng-click="show();">测试</button>
+    <button ng-click="set();">测试1</button>
+
+</form>
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+
+    var BoxCtrl = function ($scope, $element) {
+    };
+
+    var TestCtrl = function ($scope, $cacheFactory,$timeout) {
+        $scope.see = function () {
+            console.log($scope.test_form.$error);
+        };
+
+        $scope.show = function () {
+            console.log($scope.a);
+        };
+
+
+        $scope.data = [
+            {name: 'A', age: 1},
+            {name: 'B', age: 4},
+            {name: 'C', age: 3},
+            {name: 'D', age: 3}
+        ];
+
+        $scope.currDate = ((new Date().valueOf()));
+
+        var f = angular.bind({a: 'xx'},
+            function(){
+                console.log(this.a);
+            }
+        );
+        f();
+
+        var y = function(x){console.log(x)};
+        angular.bind({}, y, 'y')();
+
+
+        $scope.cache = $cacheFactory('s_' + $scope.$id, {capacity: 3});
+
+        $scope.show = function(){
+            console.log($scope.cache.get('a'));
+            console.log($scope.cache.info());
+        };
+        $scope.set = function(){
+            $scope.cache.put((new Date()).valueOf(), 'ok');
+        };
+
+        var p = $timeout(function(){console.log('haha')}, 5000);
+        p.then(function(){console.log('x')});
+    };
+
+    angular.bootstrap(document.documentElement);
+
+
+</script>
+</body>
+</html>

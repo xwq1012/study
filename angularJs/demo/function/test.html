@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+<head>
+    <meta charset="utf-8"/>
+    <title>内置24全局函数</title>
+    <script type="text/javascript" src="../../js/angular.js"></script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl">
+    <p>
+    <div>console.log(angular.lowercase("ABACcc"));</div>
+    <div>console.log(angular.uppercase("ABACcc"));</div>
+    <div>
+        var data = {a:'1',b:'2'};
+    </div>
+    <div>console.log(angular.toJson (data));</div>
+    <div>console.log(angular.fromJson(JSON.stringify(data)));</div>
+    <div>console.log(angular.equals("1","1"));</div>
+    <div>console.log(angular.isUndefined(undefined));</div>
+    <div></div>
+    <div></div>
+
+
+    </p>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    var app = angular.module("Demo", [], angular.noop);
+
+    app.controller("TestCtrl", function ($scope,$parse) {
+
+        console.log(angular.lowercase("ABACcc"));
+        console.log(angular.uppercase("ABACcc"));
+        var data = {a: '1', b: '2'};
+        console.log(angular.toJson(data));
+        console.log(angular.fromJson(JSON.stringify(data)));
+        console.log(angular.equals("1", "1"));
+        console.log(angular.isUndefined(undefined));
+        console.log(angular.identity(1, 2));
+
+
+        $parse('data1.a').assign($scope,"data1");
+        $parse('data1.b').assign($scope,"data2");
+        var data3 = angular.extend($scope.data1,$scope.data2);
+        console.log(data3.a);
+        console.log(data3.b);
+
+        function getResult(fn, input) {
+            //其实我们可以直接这样写：
+            //return fn(input); 但这样写有个问题，如果传入的fn参数不是一个function类型，会导致出错。
+            //官方推荐的写法如下：
+            return (fn || angular.identity)(input);//这里如果fn参数为空值，使用angular.identity，那么当传入的第一个参数不是function类型时，相当于第一个参数是function(input){return input}
+        }
+
+        console.log(getResult(function (n) {
+            return n * 2;
+        }, 21));  // returns 42
+        console.log(getResult(null, 21));                            // returns 21
+        console.log(getResult(undefined, 21));      // returns 21
+
+
+    });
+</script>
+</body>
+</html>
