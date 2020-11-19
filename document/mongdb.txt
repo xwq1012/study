@@ -1,0 +1,98 @@
+1、写配置conf
+    dbpath=/home/data/mongoDB/data
+    logpath=/home/data/mongoDB/log/mongodb.log
+    bind_ip=172.25.124.29
+    port=27017
+    fork=true
+    journal=false
+    storageEngine=mmapv1
+    auth=true
+
+2、启动
+3、命令加入path
+4、加入系统服务
+
+
+--创建数据
+use hn_assess
+
+
+db.hn_assess.insert({"name":"菜鸟教程"})
+--创建用户
+db.createUser(
+     {
+       user:"admin",
+       pwd:"admin",
+       roles:[{role:"root",db:"admin"}]
+     }
+  )
+
+db.createUser(
+     {
+       user:"yjzh",
+       pwd:"yjzh",
+       roles:[{role:"readWrite",db:"yjzh"}]
+     }
+  )
+
+
+
+ --测试连接
+
+ ./mongo 192.168.39.6:27017/hn12348 -u hn12348 -p hn12348
+
+ --关闭数据库
+ ./bin/mongod --config /home/soft/mongodb/mongodb.confg --shutdown
+
+killall mongod
+
+--测试用户
+db.auth('dba','dba')
+ db.auth("pfnieadmin","123456")   #认证，返回1表示成功
+
+
+ 【将mongod路径添加到系统路径中，方便随处执行mongod命令】
+ 1. 在/etc/profile文件中，添加 export PATH=$PATH:/usr/local/mongoDB/mongodbserver/bin
+ 2. 执行source /etc/profile，使系统环境变量立即生效
+
+
+ 1.通过上面简单的操作，我们已经将MongoDB配置文件配置完成，那么接下里我们将为MongoDB设置系统服务。
+2.首先添加MongoDB系统服务，命令如下：vim /etc/rc.d/init.d/mongod
+3.打开编辑器后，我们将下面的配置粘贴进去，然后保存
+
+
+
+ start() {
+mongod  --config /home/soft/mongodb/mongodb.conf
+}
+
+stop() {
+mongod --config /home/soft/mongodb/mongodb.conf --shutdown
+}
+case "$1" in
+  start)
+ start
+ ;;
+
+stop)
+ stop
+ ;;
+
+restart)
+ stop
+ start
+ ;;
+  *)
+ echo
+$"Usage: $0 {start|stop|restart}"
+ exit 1
+esac
+
+可以使用命令service mongod stop关闭MongoDB服务。
+启动MongoDB，service mongod start
+
+
+chmod +x /etc/rc.d/init.d/mongod
+
+
+学习链接：https://www.cnblogs.com/pfnie/articles/6759105.html
