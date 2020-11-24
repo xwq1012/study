@@ -1,4 +1,4 @@
-package encryp;
+package encrypt;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
