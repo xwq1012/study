@@ -17,27 +17,27 @@ import java.security.SecureRandom;
  * @Date 2020/11/24 14:16
  */
 public class EncryptUtil {
-    public static final String MD5 = "MD5";
-    public static final String SHA1 = "SHA1";
-    public static final String HmacMD5 = "HmacMD5";
-    public static final String HmacSHA1 = "HmacSHA1";
-    public static final String DES = "DES";
-    public static final String AES = "AES";
+    private static final String MD5 = "MD5";
+    private static final String SHA1 = "SHA1";
+    private static final String HmacMD5 = "HmacMD5";
+    private static final String HmacSHA1 = "HmacSHA1";
+    private static final String DES = "DES";
+    private static final String AES = "AES";
 
     /**
      * 编码格式；默认使用uft-8
      */
-    public static String charset = "utf-8";
+    private String charset = "utf-8";
     /**
      * DES
      */
-    public static int keySizeDES = 0;
+    private int keySizeDES = 0;
     /**
      * AES
      */
-    public static int keySizeAES = 128;
+    private int keySizeAES = 128;
 
-    public static EncryptUtil encryptUtil;
+    private static EncryptUtil encryptUtil;
 
     private EncryptUtil() {
         //单例
@@ -62,7 +62,7 @@ public class EncryptUtil {
      * @param algorithm 加密算法名称
      * @return
      */
-    private static String messageDigest(String res, String algorithm) {
+    private String messageDigest(String res, String algorithm) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             byte[] resBytes = charset == null ? res.getBytes() : res.getBytes(charset);
@@ -81,7 +81,7 @@ public class EncryptUtil {
      * @param key       加密使用的秘钥
      * @return
      */
-    private static String keyGeneratorMac(String res, String algorithm, String key) {
+    private String keyGeneratorMac(String res, String algorithm, String key) {
         try {
             SecretKey sk = null;
             if (key == null) {
@@ -111,7 +111,7 @@ public class EncryptUtil {
      * @param isEncode
      * @return
      */
-    private static String keyGeneratorES(String res, String algorithm, String key, int keysize, boolean isEncode) {
+    private String keyGeneratorES(String res, String algorithm, String key, int keysize, boolean isEncode) {
         try {
             KeyGenerator kg = KeyGenerator.getInstance(algorithm);
             if (keysize == 0) {
@@ -140,14 +140,14 @@ public class EncryptUtil {
         return null;
     }
 
-    private static String base64(byte[] res) {
+    private String base64(byte[] res) {
         return Base64.encode(res);
     }
 
     /**
      * 将二进制转换成16进制
      */
-    public static String parseByte2HexStr(byte buf[]) {
+    public String parseByte2HexStr(byte buf[]) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < buf.length; i++) {
             String hex = Integer.toHexString(buf[i] & 0xFF);
@@ -162,7 +162,7 @@ public class EncryptUtil {
     /**
      * 将16进制转换为二进制
      */
-    public static byte[] parseHexStr2Byte(String hexStr) {
+    public byte[] parseHexStr2Byte(String hexStr) {
         if (hexStr.length() < 1)
             return null;
         byte[] result = new byte[hexStr.length() / 2];
@@ -180,7 +180,7 @@ public class EncryptUtil {
      * @param res 需要加密的原文
      * @return
      */
-    public static String md5(String res) {
+    public String md5(String res) {
         return messageDigest(res, MD5);
     }
 
@@ -191,7 +191,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String md5(String res, String key) {
+    public String md5(String res, String key) {
         return keyGeneratorMac(res, HmacMD5, key);
     }
 
@@ -201,7 +201,7 @@ public class EncryptUtil {
      * @param res 需要加密的原文
      * @return
      */
-    public static String sha1(String res) {
+    public String sha1(String res) {
         return messageDigest(res, SHA1);
     }
 
@@ -212,7 +212,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String sha1(String res, String key) {
+    public String sha1(String res, String key) {
         return keyGeneratorMac(res, HmacSHA1, key);
     }
 
@@ -223,7 +223,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String desEncode(String res, String key) {
+    public String desEncode(String res, String key) {
         return keyGeneratorES(res, DES, key, keySizeDES, true);
     }
 
@@ -234,7 +234,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String desDecode(String res, String key) {
+    public String desDecode(String res, String key) {
         return keyGeneratorES(res, DES, key, keySizeDES, false);
     }
 
@@ -245,7 +245,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String aesEncode(String res, String key) {
+    public String aesEncode(String res, String key) {
         return keyGeneratorES(res, AES, key, keySizeAES, true);
     }
 
@@ -256,7 +256,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String aesDecode(String res, String key) {
+    public String aesDecode(String res, String key) {
         return keyGeneratorES(res, AES, key, keySizeAES, false);
     }
 
@@ -267,7 +267,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String xorEncode(String res, String key) {
+    public String xorEncode(String res, String key) {
         byte[] bs = res.getBytes();
         for (int i = 0; i < bs.length; i++) {
             bs[i] = (byte) ((bs[i]) ^ key.hashCode());
@@ -282,7 +282,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static String xorDecode(String res, String key) {
+    public String xorDecode(String res, String key) {
         byte[] bs = parseHexStr2Byte(res);
         for (int i = 0; i < bs.length; i++) {
             bs[i] = (byte) ((bs[i]) ^ key.hashCode());
@@ -297,7 +297,7 @@ public class EncryptUtil {
      * @param key 秘钥
      * @return
      */
-    public static int xor(int res, String key) {
+    public int xor(int res, String key) {
         return res ^ key.hashCode();
     }
 
@@ -307,7 +307,7 @@ public class EncryptUtil {
      * @param res 密文
      * @return
      */
-    public static String base64Encode(String res) {
+    public String base64Encode(String res) {
         return Base64.encode(res.getBytes());
     }
 
@@ -317,27 +317,26 @@ public class EncryptUtil {
      * @param res
      * @return
      */
-    public static String base64Decode(String res) {
+    public String base64Decode(String res) {
         return new String(Base64.decode(res));
     }
 
     public static void main(String[] args) {
-        System.out.println(base64Encode("xwq"));
-        System.out.println(base64Decode("eHdx"));
-        System.out.println(xorEncode("xwq", "xwq"));
-        System.out.println(xorDecode("2A2523", "xwq"));
-        System.out.println(aesEncode("xwq", "xwq"));
-        System.out.println(aesDecode("49B1289B25E5637074E07621996CAF4D", "xwq"));
-        System.out.println(desEncode("xwq", "xwq"));
-        System.out.println(desDecode("28F8BFE11650EB3B", "xwq"));
+        EncryptUtil encryptUtil = EncryptUtil.getInstance();
+        System.out.println(encryptUtil.base64Encode("xwq"));
+        System.out.println(encryptUtil.base64Decode("eHdx"));
+        System.out.println(encryptUtil.xorEncode("xwq", "xwq"));
+        System.out.println(encryptUtil.xorDecode("2A2523", "xwq"));
+        System.out.println(encryptUtil.aesEncode("xwq", "xwq"));
+        System.out.println(encryptUtil.aesDecode("49B1289B25E5637074E07621996CAF4D", "xwq"));
+        System.out.println(encryptUtil.desEncode("xwq", "xwq"));
+        System.out.println(encryptUtil.desDecode("28F8BFE11650EB3B", "xwq"));
+        System.out.println(encryptUtil.parseByte2HexStr("xwq".getBytes()));
+        System.out.println(new String(encryptUtil.parseHexStr2Byte("787771")));
 
-        System.out.println(md5("xwq"));
-        System.out.println(md5("xwq", "xwq"));
-        System.out.println(sha1("xwq"));
-        System.out.println(sha1("xwq", "xwq"));
-        System.out.println(parseByte2HexStr("xwq".getBytes()));
-        System.out.println(new String(parseHexStr2Byte("787771")));
-
-
+        System.out.println(encryptUtil.md5("xwq"));
+        System.out.println(encryptUtil.md5("xwq", "xwq"));
+        System.out.println(encryptUtil.sha1("xwq"));
+        System.out.println(encryptUtil.sha1("xwq", "xwq"));
     }
 }
